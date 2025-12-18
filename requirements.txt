@@ -1,0 +1,15 @@
+tensorflow>=2.10
+numpy
+pandas
+opencv-python
+matplotlib
+scikit-learn
+pillow
+django
+lime
+torch
+torchvision
+timm
+seaborn
+jupyter
+imutils

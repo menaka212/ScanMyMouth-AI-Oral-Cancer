@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual environments
+venv/
+venv310/
+
+# Datasets (do not upload)
+data/
+
+# Trained models (do not upload)
+models/
+*.h5
+*.pth
+*.ckpt
+
+# Notebook junk
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
