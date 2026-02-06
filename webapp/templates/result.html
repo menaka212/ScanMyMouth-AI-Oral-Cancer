@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>OralGuard AI – Analysis Result</title>
+
+<style>
+:root{
+  --primary:#0bbcd6;
+  --low:#22c55e;
+  --high:#ef4444;
+  --bg:#f4f7fb;
+  --card:#ffffff;
+  --text:#0f172a;
+  --muted:#64748b;
+}
+
+*{box-sizing:border-box;font-family:"Segoe UI",sans-serif;}
+body{margin:0;background:var(--bg);color:var(--text);}
+
+header{
+  background:#fff;
+  padding:16px 40px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #e5e7eb;
+}
+
+.brand{display:flex;gap:10px;align-items:center;}
+.brand-icon{
+  width:36px;height:36px;
+  background:linear-gradient(135deg,#0bbcd6,#22d3ee);
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+}
+
+.new-btn{
+  border:1px solid #cbd5e1;
+  padding:8px 16px;
+  border-radius:10px;
+  background:#fff;
+  cursor:pointer;
+}
+
+.container{max-width:1200px;margin:30px auto;padding:0 20px;}
+
+.card{
+  background:var(--card);
+  border-radius:16px;
+  padding:24px;
+  box-shadow:0 10px 30px rgba(0,0,0,.06);
+  margin-bottom:24px;
+}
+
+.alert{
+  border-radius:16px;
+  padding:24px;
+}
+.alert.high{background:#fff1f2;border:1px solid #fecaca;}
+.alert.low{background:#ecfeff;border:1px solid #67e8f9;}
+
+.badge{
+  padding:6px 14px;
+  border-radius:999px;
+  font-weight:600;
+  font-size:14px;
+}
+.badge.high{background:#fee2e2;color:#7f1d1d;}
+.badge.low{background:#dcfce7;color:#166534;}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:24px;
+}
+.disclaimer {
+            max-width: 800px;
+            margin: 30px auto 60px;
+            background: #f1f5f9;
+            padding: 18px 22px;
+            border-radius: 10px;
+            color: #475569;
+            font-size: 14px;
+            display: flex;
+            gap: 12px;
+        }
+.progress{
+  height:10px;
+  background:#e5e7eb;
+  border-radius:999px;
+  overflow:hidden;
+}
+.progress-bar{
+  height:100%;
+  background:linear-gradient(90deg,var(--primary),#22d3ee);
+}
+
+.image-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+.image-grid img{
+  width:100%;
+  max-width:420px;
+  border-radius:14px;
+}
+
+footer{text-align:center;padding:30px;color:var(--muted);}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="brand">
+    <div class="brand-icon">🧠</div>
+    <div>
+      <strong>OralGuard AI</strong><br>
+      <small>Early Oral Cancer Detection</small>
+    </div>
+  </div>
+  <a href="/" class="new-btn">New Analysis</a>
+</header>
+
+<div class="container">
+
+<!-- ================= RESULT ================= -->
+
+<div class="card alert {% if assessment.status == 'Positive' %}cancer{% else %}normal{% endif %}">
+  <h2>
+    Detection Result:
+    <span style="color:{% if assessment.status == 'Positive' %}#dc2626{% else %}#16a34a{% endif %}">
+      {{ assessment.status }}
+    </span>
+  </h2>
+
+  <p>{{ assessment.summary }}</p>
+
+  <span class="badge {% if assessment.priority == 'Urgent Priority' %}high{% else %}low{% endif %}">
+    {{ assessment.priority }}
+  </span>
+</div>
+
+<!-- ================= GRAD-CAM ================= -->
+<div class="card">
+<h3>Grad-CAM Visualization</h3>
+<div class="image-grid">
+<img src="/{{ original_image }}" alt="Original Image">
+<img src="/{{ heatmap }}" alt="Grad-CAM Heatmap">
+</div>
+</div>
+<div class="card alert {% if risk == 'HIGH' %}high{% else %}low{% endif %}">
+<h2>Detection Result: {{ label }}</h2>
+
+{% if risk == "HIGH" %}
+<p>High-risk oral lesion detected. Immediate clinical evaluation is advised.</p>
+<span class="badge high">High Risk</span>
+{% else %}
+<p>No high-risk patterns detected. Oral tissue appears normal.</p>
+<span class="badge low">Low Risk</span>
+{% endif %}
+</div>
+<!-- ================= SEVERITY & RISK ================= -->
+<div class="grid">
+
+<div class="card">
+<h3>Severity Assessment</h3>
+<p><strong>Level:</strong>
+<span class="badge {% if risk == 'HIGH' %}high{% else %}low{% endif %}">
+{{ assessment.severity.level }}
+</span>
+</p>
+
+<p>Severity Score: {{ assessment.severity.score }}%</p>
+<p>{{ assessment.severity.summary }}</p>
+
+<div class="progress">
+  <div class="progress-bar" style="width:{{ assessment.severity.score }}%"></div>
+</div>
+</div>
+
+<div class="card">
+<h3>Risk Assessment</h3>
+<p><strong>Risk Level:</strong>
+<span class="badge {% if risk == 'HIGH' %}high{% else %}low{% endif %}">
+{{ assessment.risk.level }}
+</span>
+</p>
+
+<p>Probability: {{ assessment.risk.probability }}</p>
+
+<ul>
+{% for factor in assessment.risk.factors %}
+<li>{{ factor }}</li>
+{% endfor %}
+</ul>
+</div>
+
+</div>
+
+<!-- ================= LESION & RECOMMENDATION ================= -->
+<div class="grid">
+
+<div class="card">
+<h3>Lesion Analysis</h3>
+<p><strong>Location:</strong> {{ assessment.lesion.location }}</p>
+<p><strong>Size:</strong> {{ assessment.lesion.size }}</p>
+<p><strong>Color:</strong> {{ assessment.lesion.color }}</p>
+<p><strong>Border:</strong> {{ assessment.lesion.border }}</p>
+<p><strong>Surface:</strong> {{ assessment.lesion.surface }}</p>
+</div>
+
+<div class="card">
+<h3>Recommendations</h3>
+<p><strong>Urgency:</strong>
+<span class="badge {% if risk == 'HIGH' %}high{% else %}low{% endif %}">
+{{ assessment.recommendation.urgency }}
+</span>
+</p>
+
+<ul>
+{% for action in assessment.recommendation.actions %}
+<li>{{ action }}</li>
+{% endfor %}
+</ul>
+</div>
+
+</div>
+
+</div>
+<div class="disclaimer">
+    ⚠️
+    <div>
+        <strong>Disclaimer:</strong>
+        This tool is for screening purposes only and not a substitute for
+        professional medical diagnosis.
+        <p style="font-size:12px;color:#64748b">
+       ⚠️ This system is intended for research and educational purposes only.
+       It does not replace professional medical diagnosis.
+</p>
+
+    </div>
+</div>
+<footer>
+  
+© 2026 OralGuard AI – Final Year Project
+</footer>
+
+</body>
+</html>

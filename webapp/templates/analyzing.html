@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Analyzing Image | OralGuard AI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #0bbcd6, #22c1c3);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.card {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 40px;
+    width: 90%;
+    max-width: 450px;
+    text-align: center;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+}
+
+.loader {
+    margin: 25px auto;
+    width: 70px;
+    height: 70px;
+    border: 6px solid rgba(255,255,255,0.3);
+    border-top: 6px solid #ffffff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>🧠 Analyzing Image</h2>
+    <p>
+        Our AI is examining the oral cavity image<br>
+        for cancerous and suspicious patterns.
+    </p>
+
+    <div class="loader"></div>
+
+    <p style="font-size:14px; opacity:0.9">
+        Applying deep learning & Grad-CAM visualization…
+    </p>
+</div>
+
+<!-- ✅ HIDDEN FORM THAT AUTO-SUBMITS -->
+<form id="analyzeForm" method="POST" enctype="multipart/form-data" action="{% url 'analyze' %}">
+    {% csrf_token %}
+    <input type="hidden" name="image_name" value="{{ image_name }}">
+</form>
+
+<script>
+    setTimeout(() => {
+        document.getElementById("analyzeForm").submit();
+    }, 1800); // 1.8 seconds
+</script>
+
+</body>
+</html>

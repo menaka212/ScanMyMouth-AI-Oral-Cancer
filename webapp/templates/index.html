@@ -1,81 +1,304 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Oral Cancer Detection</title>
+    <meta charset="UTF-8">
+    <title>OralGuard AI | Early Oral Cancer Detection</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            text-align: center;
-            padding-top: 40px;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            background: #f6f9fc;
+            color: #1f2937;
         }
-        .card {
+
+        /* ---------- HEADER ---------- */
+        .navbar {
+            display: flex;
+            align-items: center;
+            padding: 16px 40px;
             background: white;
-            width: 450px;
-            margin: auto;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 0 12px rgba(0,0,0,0.15);
-            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
         }
-        h2 {
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 20px;
+            color: #0ea5e9;
+        }
+
+        .logo span {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        /* ---------- HERO ---------- */
+        .hero {
+            text-align: center;
+            padding: 70px 20px 40px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #e0f2fe;
+            color: #0284c7;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .hero h1 {
+            font-size: 44px;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: #14b8a6;
+        }
+
+        .hero p {
+            max-width: 700px;
+            margin: auto;
+            font-size: 18px;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+
+        /* ---------- FEATURE CARDS ---------- */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            padding: 50px 60px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+        }
+
+        .feature-card h3 {
+            margin-top: 15px;
+            font-size: 18px;
+        }
+
+        .feature-card p {
+            color: #6b7280;
+            font-size: 15px;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        /* ---------- UPLOAD BOX ---------- */
+        .upload-wrapper {
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .upload-box {
+            background: white;
+            width: 100%;
+            max-width: 700px;
+            border: 2px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 45px;
             text-align: center;
         }
-        .row {
-            margin: 10px 0;
-            font-size: 16px;
+
+        .upload-box:hover {
+            border-color: #22c1c3;
         }
-        .label {
-            font-weight: bold;
+
+        .upload-box h3 {
+            margin-top: 15px;
+            font-size: 20px;
         }
-        .high { color: red; }
-        .medium { color: orange; }
-        .low { color: green; }
-        img {
-            display: block;
-            margin: 15px auto;
-            width: 300px;
-            border-radius: 8px;
+
+        .upload-box p {
+            color: #6b7280;
+            margin: 10px 0 25px;
         }
-        button {
-            padding: 10px 20px;
-            background: #007BFF;
+
+        .select-btn {
+            background: #f1f5f9;
+            color: #0f172a;
+            padding: 10px 18px;
+            border-radius: 10px;
+            border: 1px solid #cbd5e1;
+            cursor: pointer;
+        }
+
+        .select-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .analyze-btn {
+            background: linear-gradient(135deg, #06b6d4, #22c1c3);
             color: white;
+            padding: 12px 26px;
+            border-radius: 12px;
             border: none;
-            border-radius: 6px;
-            margin-top: 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .analyze-btn:hover {
+            opacity: 0.9;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        /* ---------- DISCLAIMER ---------- */
+        .disclaimer {
+            max-width: 800px;
+            margin: 30px auto 60px;
+            background: #f1f5f9;
+            padding: 18px 22px;
+            border-radius: 10px;
+            color: #475569;
+            font-size: 14px;
+            display: flex;
+            gap: 12px;
+        }
+
+        /* ---------- FOOTER ---------- */
+        footer {
+            text-align: center;
+            padding: 25px;
+            font-size: 14px;
+            color: #6b7280;
         }
     </style>
 </head>
+
 <body>
 
-<div class="card">
-    <h2>Oral Cancer Detection</h2>
-
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="file" name="image" required>
-        <br><br>
-        <button type="submit">Analyze</button>
-    </form>
-
-    {% if result %}
-        <hr>
-        <div class="row"><span class="label">Uploaded Image:</span> {{ image_name }}</div>
-        <div class="row"><span class="label">AI Prediction:</span> {{ result }}</div>
-        <div class="row"><span class="label">Confidence Score:</span> {{ confidence }}%</div>
-
-        <div class="row">
-            <span class="label">Risk Level:</span>
-            <span class="{{ risk|lower }}">{{ risk }}</span>
-        </div>
-
-        <div class="row"><span class="label">Heatmap Generated:</span> YES</div>
-
-       <img src="{{ heatmap_url }}" width="300">
-
-    {% endif %}
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">
+        🧠 OralGuard AI
+        <span>Early Oral Cancer Detection</span>
+    </div>
 </div>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="badge">✨ AI-Powered Medical Imaging Analysis</div>
+
+    <h1>
+        Early Detection of <span>Oral Risk Analyser</span><br>
+        Using Advanced AI
+    </h1>
+
+    <p>
+        Upload an image of the oral cavity for AI-powered analysis.
+        Our system uses advanced deep learning with Grad-CAM visualization
+        to identify and highlight potential areas of concern.
+    </p>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+    <div class="feature-card">
+        ⚡
+        <h3>Severity Assessment</h3>
+        <p>Comprehensive severity scoring from mild to critical.</p>
+    </div>
+
+    <div class="feature-card">
+        🛡️
+        <h3>Risk Analysis</h3>
+        <p>Probability-based cancer risk estimation.</p>
+    </div>
+
+    <div class="feature-card">
+        🔥
+        <h3>Grad-CAM Heatmap</h3>
+        <p>Visual explanation of AI decision.</p>
+    </div>
+</section>
+
+<!-- UPLOAD -->
+<section class="upload-wrapper">
+    <form method="POST" enctype="multipart/form-data" action="{% url 'analyzing' %}">
+        {% csrf_token %}
+
+        <div class="upload-box">
+            <div class="upload-icon">⬆️</div>
+
+            <h3>Upload Oral Cavity Image</h3>
+            <p>
+                Drag and drop an image here, or click to browse.<br>
+                Supports JPG, PNG, and HEIC formats.
+            </p>
+
+            <input
+                id="image-upload"
+                type="file"
+                name="image"
+                accept=".jpg,.jpeg,.png,.heic"
+                required
+            >
+
+            <button
+                type="button"
+                class="select-btn"
+                onclick="document.getElementById('image-upload').click();">
+                Select Image
+            </button>
+
+            <br><br>
+
+            <button type="submit" class="analyze-btn">
+                Analyze Image
+            </button>
+        </div>
+    </form>
+</section>
+
+<!-- DISCLAIMER -->
+<div class="disclaimer">
+    ⚠️
+    <div>
+        <strong>Disclaimer:</strong>
+        This tool is for screening purposes only and not a substitute for
+        professional medical diagnosis.
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    © 2026 OralGuard AI – Final Year Project
+</footer>
+
+<!-- ✅ SAFE VALIDATION -->
+<script>
+    const form = document.querySelector("form");
+    const fileInput = document.getElementById("image-upload");
+
+    form.addEventListener("submit", function (e) {
+        if (!fileInput.files.length) {
+            e.preventDefault();
+            alert("Please select an image before analyzing.");
+        }
+    });
+</script>
 
 </body>
 </html>

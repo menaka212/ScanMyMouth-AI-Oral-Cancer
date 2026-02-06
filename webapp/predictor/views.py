@@ -1,35 +1,51 @@
-from django.shortcuts import render
-from .utils import predict_and_gradcam
 import os
+from django.shortcuts import render
+from django.conf import settings
+from django.utils.text import get_valid_filename
+from .utils import predict_and_gradcam
+
 
 def index(request):
-    context = {}
+    return render(request, "index.html")
 
-    if request.method == 'POST' and request.FILES.get('image'):
-        img = request.FILES['image']
-        img_path = os.path.join('static', img.name)
 
-        with open(img_path, 'wb+') as f:
-            for chunk in img.chunks():
+def analyzing(request):
+    if request.method == "POST":
+
+        image = request.FILES.get("image")
+        if not image:
+            return render(request, "index.html", {"error": "No image uploaded"})
+
+        # Ensure media directory exists
+        os.makedirs(settings.MEDIA_ROOT, exist_ok=True)
+
+        # Sanitize filename
+        safe_name = get_valid_filename(image.name)
+        image_path = os.path.join(settings.MEDIA_ROOT, safe_name)
+
+        # Save image
+        with open(image_path, "wb+") as f:
+            for chunk in image.chunks():
                 f.write(chunk)
 
-        result, confidence = predict_and_gradcam(img_path)
+        return render(request, "analyzing.html", {
+            "image_name": safe_name
+        })
 
-        # Risk level logic
-        if confidence >= 80:
-            risk = "HIGH"
-        elif confidence >= 50:
-            risk = "MEDIUM"
-        else:
-            risk = "LOW"
+    return render(request, "index.html")
 
-        context = {
-            'image_name': img.name,
-            'result': result.upper(),
-            'confidence': confidence,
-            'risk': risk,
-            'heatmap': True,
-            'heatmap_url': '/media/heatmap.png'
-        }
 
-    return render(request, 'index.html', context)
+def analyze(request):
+    if request.method == "POST":
+
+        image_name = request.POST.get("image_name")
+        if not image_name:
+            return render(request, "index.html", {"error": "Image missing"})
+
+        image_path = os.path.join(settings.MEDIA_ROOT, image_name)
+
+        result = predict_and_gradcam(image_path)
+
+        return render(request, "result.html", result)
+
+    return render(request, "index.html")
