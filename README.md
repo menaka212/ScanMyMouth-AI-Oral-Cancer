@@ -1,7 +1,7 @@
 # ScanMyMouth-AI-Oral-Cancer
+
 An AI-powered oral cancer screening system that analyzes oral images, predicts cancer risk, and provides explainable results using Grad-CAM heatmaps.
-=======
-# Oral Cancer Detection using EfficientNet + Grad-CAM + ViT
+Oral Cancer Detection using EfficientNet + Grad-CAM + ViT
 
 This project detects oral cancer from medical images using:
 - EfficientNetB0 (classification)
