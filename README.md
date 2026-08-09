@@ -32,8 +32,8 @@ The system displays:
 
 - AI prediction result
   <img width="1895" height="863" alt="Screenshot 2026-02-09 114725" src="https://github.com/user-attachments/assets/70a51993-3998-479d-a890-89d5ade34dd1" />
-  <img width="959" height="573" alt="Screenshot 2026-02-09 115122" src="https://github.com/user-attachments/assets/a8f6915f-77e6-44b5-ab0e-b6e3c51bf457" />
-  <img width="821" height="416" alt="Screenshot 2026-02-09 115637" src="https://github.com/user-attachments/assets/61e793d1-3347-4036-9eb6-c160d2bd9393" />
+  <img width="1895" height="863" alt="Screenshot 2026-02-09 115122" src="https://github.com/user-attachments/assets/a8f6915f-77e6-44b5-ab0e-b6e3c51bf457" />
+  <img width="1895" height="863" alt="Screenshot 2026-02-09 115637" src="https://github.com/user-attachments/assets/61e793d1-3347-4036-9eb6-c160d2bd9393" />
 
   
 - Confidence Score and Risk Level
