@@ -28,6 +28,8 @@ This project detects oral cancer from medical images using:
 ## 📊 Output
 The system displays:
 - Uploaded image
+  <img width="1876" height="870" alt="Screenshot 2026-02-09 114004" src="https://github.com/user-attachments/assets/e1e725b4-1bf9-4c21-b483-9ce3244133b8" />
+
 - AI prediction result
 - Confidence score
 - Risk level
